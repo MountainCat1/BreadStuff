@@ -1,4 +1,5 @@
 using BreadChat.Application.Services;
+using BreadChat.Middlewares;
 using BreadChat.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,8 @@ builder.Services.AddDbContext<IBreadChatDbContext, BreadChatDbContext>(options =
 });
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddSingleton<ErrorHandlingMiddleware>();
+
 
 var app = builder.Build();
 
@@ -32,7 +35,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapControllers();
-
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.Run();

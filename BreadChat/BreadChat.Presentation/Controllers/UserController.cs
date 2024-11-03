@@ -27,9 +27,11 @@ public class UserController : Controller
         return Ok(user);
     }
     
-    [HttpGet("")]
-    public IActionResult GetUsers()
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUser([FromRoute] Guid id)
     {
-        return Ok("XD");
+        var user = await _userService.GetUserAsync(id);
+
+        return Ok(user);
     }
 }
