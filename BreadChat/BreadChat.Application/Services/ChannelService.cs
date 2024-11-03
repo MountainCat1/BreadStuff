@@ -1,9 +1,7 @@
 ﻿using BreadChat.Application.ApplicationErrors;
-using BreadChat.Application.Dtos;
 using BreadChat.Application.Dtos.ChannelDtos;
 using BreadChat.Domain.Entities;
 using BreadChat.Persistence;
-using BreadChat.Persistence.DbEntities;
 using Microsoft.EntityFrameworkCore;
 
 namespace BreadChat.Application.Services;
@@ -27,13 +25,11 @@ public class ChannelService : IChannelService
     {
         var channel = Channel.Create(name, description); // create domain entity
 
-        var channelDbEntity = ChannelDbEntity.FromDomain(channel); // convert to db entity
-
-        _dbContext.Channels.Add(channelDbEntity); // add to db context
+        _dbContext.Channels.Add(channel); // add to db context
 
         await _dbContext.SaveChangesAsync(); // save changes
 
-        return ChannelDto.FromDbEntity(channelDbEntity); // convert to dto
+        return ChannelDto.FromDbEntity(channel); // convert to dto
     }
 
     public async Task<ChannelDto> GetChannelAsync(Guid id)

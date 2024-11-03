@@ -19,84 +19,51 @@ namespace BreadChat.Persistence.Migrations
                 name: "IX_Users_ChannelDbEntityId",
                 table: "Users");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Channels",
-                table: "Channels");
-
             migrationBuilder.DropColumn(
                 name: "ChannelDbEntityId",
                 table: "Users");
 
-            migrationBuilder.RenameTable(
-                name: "Channels",
-                newName: "UserChannels");
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_UserChannels",
-                table: "UserChannels",
-                column: "Id");
-
             migrationBuilder.CreateTable(
-                name: "UserChannelDbEntity",
+                name: "UserChannels",
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ChannelId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ChannelDbEntityId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    UsersId = table.Column<Guid>(type: "TEXT", nullable: false)
+                    ChannelId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserChannelDbEntity", x => new { x.UserId, x.ChannelId });
+                    table.PrimaryKey("PK_UserChannels", x => new { x.UserId, x.ChannelId });
                     table.ForeignKey(
-                        name: "FK_UserChannelDbEntity_UserChannels_ChannelDbEntityId",
-                        column: x => x.ChannelDbEntityId,
-                        principalTable: "UserChannels",
+                        name: "FK_UserChannels_Channels_ChannelId",
+                        column: x => x.ChannelId,
+                        principalTable: "Channels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserChannelDbEntity_Users_UsersId",
-                        column: x => x.UsersId,
+                        name: "FK_UserChannels_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserChannelDbEntity_ChannelDbEntityId",
-                table: "UserChannelDbEntity",
-                column: "ChannelDbEntityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserChannelDbEntity_UsersId",
-                table: "UserChannelDbEntity",
-                column: "UsersId");
+                name: "IX_UserChannels_ChannelId",
+                table: "UserChannels",
+                column: "ChannelId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "UserChannelDbEntity");
-
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_UserChannels",
-                table: "UserChannels");
-
-            migrationBuilder.RenameTable(
-                name: "UserChannels",
-                newName: "Channels");
+                name: "UserChannels");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "ChannelDbEntityId",
                 table: "Users",
                 type: "TEXT",
                 nullable: true);
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Channels",
-                table: "Channels",
-                column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_ChannelDbEntityId",

@@ -1,5 +1,4 @@
 ﻿using BreadChat.Domain.Entities;
-using BreadChat.Persistence.DbEntities;
 
 namespace BreadChat.Application.Dtos;
 
@@ -13,17 +12,6 @@ public class UserDto
     public string LastName { get; private set; }
     
     public static UserDto FromDomain(User user)
-    {
-        return new UserDto
-        {
-            Id = user.Id,
-            Username = user.Username,
-            FirstName = user.FirstName,
-            LastName = user.LastName
-        };
-    }
-    
-    public static UserDto FromDbEntity(UserDbEntity user)
     {
         return new UserDto
         {

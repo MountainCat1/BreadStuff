@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BreadChat.Persistence.Migrations
 {
     [DbContext(typeof(BreadChatDbContext))]
-    [Migration("20241103154901_AddChannelUserRelationship")]
+    [Migration("20241103160755_AddChannelUserRelationship")]
     partial class AddChannelUserRelationship
     {
         /// <inheritdoc />
@@ -20,30 +20,7 @@ namespace BreadChat.Persistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
 
-            modelBuilder.Entity("BreadChat.Domain.Entities.UserChannelDbEntity", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ChannelId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ChannelDbEntityId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("UsersId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("UserId", "ChannelId");
-
-                    b.HasIndex("ChannelDbEntityId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("UserChannelDbEntity");
-                });
-
-            modelBuilder.Entity("BreadChat.Persistence.DbEntities.ChannelDbEntity", b =>
+            modelBuilder.Entity("BreadChat.Domain.Entities.Channel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -60,10 +37,10 @@ namespace BreadChat.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserChannels", (string)null);
+                    b.ToTable("Channels", (string)null);
                 });
 
-            modelBuilder.Entity("BreadChat.Persistence.DbEntities.UserDbEntity", b =>
+            modelBuilder.Entity("BreadChat.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -89,17 +66,32 @@ namespace BreadChat.Persistence.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("BreadChat.Domain.Entities.UserChannelDbEntity", b =>
+            modelBuilder.Entity("BreadChat.Domain.Entities.UserChannel", b =>
                 {
-                    b.HasOne("BreadChat.Persistence.DbEntities.ChannelDbEntity", null)
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ChannelId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("UserId", "ChannelId");
+
+                    b.HasIndex("ChannelId");
+
+                    b.ToTable("UserChannels", (string)null);
+                });
+
+            modelBuilder.Entity("BreadChat.Domain.Entities.UserChannel", b =>
+                {
+                    b.HasOne("BreadChat.Domain.Entities.Channel", null)
                         .WithMany()
-                        .HasForeignKey("ChannelDbEntityId")
+                        .HasForeignKey("ChannelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BreadChat.Persistence.DbEntities.UserDbEntity", null)
+                    b.HasOne("BreadChat.Domain.Entities.User", null)
                         .WithMany()
-                        .HasForeignKey("UsersId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

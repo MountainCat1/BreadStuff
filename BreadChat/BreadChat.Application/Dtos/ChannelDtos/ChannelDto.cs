@@ -1,5 +1,4 @@
 ﻿using BreadChat.Domain.Entities;
-using BreadChat.Persistence.DbEntities;
 
 namespace BreadChat.Application.Dtos.ChannelDtos;
 
@@ -21,14 +20,14 @@ public class ChannelDto
         };
     }
     
-    public static ChannelDto FromDbEntity(ChannelDbEntity channel)
+    public static ChannelDto FromDbEntity(Channel channel)
     {
         return new ChannelDto()
         {
             Id = channel.Id,
             Name = channel.Name,
             Description = channel.Description,
-            Users = channel.Users.Select(x => UserDto.FromDbEntity(x)).ToList(),
+            Users = channel.Users.Select(x => UserDto.FromDomain(x)).ToList(),
         };
     }
 }

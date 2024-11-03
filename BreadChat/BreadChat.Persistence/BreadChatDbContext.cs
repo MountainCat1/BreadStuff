@@ -1,5 +1,4 @@
 ﻿using BreadChat.Domain.Entities;
-using BreadChat.Persistence.DbEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -7,8 +6,8 @@ namespace BreadChat.Persistence;
 
 public interface IBreadChatDbContext
 {
-    DbSet<UserDbEntity> Users { get; set; }
-    DbSet<ChannelDbEntity> Channels { get; set; }
+    DbSet<User> Users { get; set; }
+    DbSet<Channel> Channels { get; set; }
     DatabaseFacade Database { get; }
 
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
@@ -16,8 +15,8 @@ public interface IBreadChatDbContext
 
 public class BreadChatDbContext : DbContext, IBreadChatDbContext
 {
-    public DbSet<UserDbEntity> Users { get; set; }
-    public DbSet<ChannelDbEntity> Channels { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Channel> Channels { get; set; }
     
     public BreadChatDbContext(DbContextOptions<BreadChatDbContext> options) : base(options)
     {
@@ -26,7 +25,7 @@ public class BreadChatDbContext : DbContext, IBreadChatDbContext
 
     protected override void OnModelCreating(ModelBuilder mb)
     {
-        var user = mb.Entity<UserDbEntity>();
+        var user = mb.Entity<User>();
 
         user.ToTable("Users");
         user.HasKey(x => x.Id);
@@ -34,14 +33,14 @@ public class BreadChatDbContext : DbContext, IBreadChatDbContext
         user.Property(x => x.FirstName).IsRequired().HasMaxLength(32);
         user.Property(x => x.LastName).IsRequired().HasMaxLength(32);
 
-        var channel = mb.Entity<ChannelDbEntity>();
+        var channel = mb.Entity<Channel>();
         channel.ToTable("Channels");
         channel.HasKey(x => x.Id);
         channel.Property(x => x.Name).IsRequired().HasMaxLength(32);
-        channel.HasMany<UserDbEntity>(x => x.Users).WithMany().UsingEntity<UserChannelDbEntity>();
+        channel.HasMany<User>(x => x.Users).WithMany().UsingEntity<UserChannel>();
 
-        channel.ToTable("UserChannels");
-        var userChannel = mb.Entity<UserChannelDbEntity>();
+        var userChannel = mb.Entity<UserChannel>();
+        userChannel.ToTable("UserChannels");
         userChannel.HasKey(x => new { x.UserId, x.ChannelId });
         
     }
