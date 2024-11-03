@@ -4,30 +4,29 @@ using BreadChat.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+services.AddControllers();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+services.AddMvc();
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddMvc();
-
-builder.Services.AddDbContext<IBreadChatDbContext, BreadChatDbContext>(options =>
+services.AddDbContext<IBreadChatDbContext, BreadChatDbContext>(options =>
 {
     options.UseSqlite("Data Source=breadchat.db", x =>
     {
         x.MigrationsAssembly($"{typeof(BreadChatDbContext).Assembly.GetName().Name}");
     });
 });
-builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.AddSingleton<ErrorHandlingMiddleware>();
+services.AddScoped<IUserService, UserService>();
+services.AddScoped<IChannelService, ChannelService>();
+
+services.AddSingleton<ErrorHandlingMiddleware>();
 
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -38,5 +37,12 @@ app.MapControllers();
 app.UseHttpsRedirection();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<IBreadChatDbContext>();
+    
+    await dbContext.Database.MigrateAsync();
+}
 
 app.Run();
