@@ -1,0 +1,6 @@
+@BreadChat_HostAddress = http://localhost:5156
+
+GET {{BreadChat_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

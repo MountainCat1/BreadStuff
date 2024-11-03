@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BreadChat", "BreadChat\BreadChat.csproj", "{201669C1-5559-4172-AD3C-CC743449DF60}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{201669C1-5559-4172-AD3C-CC743449DF60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{201669C1-5559-4172-AD3C-CC743449DF60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{201669C1-5559-4172-AD3C-CC743449DF60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{201669C1-5559-4172-AD3C-CC743449DF60}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
