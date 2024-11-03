@@ -1,0 +1,16 @@
+﻿# Entities
+- User
+  - Id
+  - Username
+  - First Name
+  - Last Name
+- Channel
+  - Id
+  - Name
+  - Description
+  - Users (List<User>)
+  - Messages (List<Message>)
+- Message
+  - Id
+  - Content
+  - Author (User)

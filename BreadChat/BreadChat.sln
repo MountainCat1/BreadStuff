@@ -1,6 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BreadChat", "BreadChat\BreadChat.csproj", "{201669C1-5559-4172-AD3C-CC743449DF60}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BreadChat.Presentation", "BreadChat.Presentation\BreadChat.Presentation.csproj", "{201669C1-5559-4172-AD3C-CC743449DF60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BreadChat.Domain", "BreadChat.Domain\BreadChat.Domain.csproj", "{357F7C27-96C7-459A-8719-A84811F07FC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BreadChat.Persistence", "BreadChat.Persistence\BreadChat.Persistence.csproj", "{D27A995B-BB7F-4724-8157-03567303DD51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BreadChat.Application", "BreadChat.Application\BreadChat.Application.csproj", "{099CDED3-3780-441D-B3F1-11EE6990C54D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +18,17 @@ Global
 		{201669C1-5559-4172-AD3C-CC743449DF60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{201669C1-5559-4172-AD3C-CC743449DF60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{201669C1-5559-4172-AD3C-CC743449DF60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{357F7C27-96C7-459A-8719-A84811F07FC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{357F7C27-96C7-459A-8719-A84811F07FC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{357F7C27-96C7-459A-8719-A84811F07FC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{357F7C27-96C7-459A-8719-A84811F07FC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D27A995B-BB7F-4724-8157-03567303DD51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D27A995B-BB7F-4724-8157-03567303DD51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D27A995B-BB7F-4724-8157-03567303DD51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D27A995B-BB7F-4724-8157-03567303DD51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{099CDED3-3780-441D-B3F1-11EE6990C54D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{099CDED3-3780-441D-B3F1-11EE6990C54D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{099CDED3-3780-441D-B3F1-11EE6990C54D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{099CDED3-3780-441D-B3F1-11EE6990C54D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
