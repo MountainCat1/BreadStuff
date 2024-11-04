@@ -10,6 +10,7 @@ public interface IUserService
 {
     public Task<UserDto> CreateUserAsync(string username, string firstName, string lastName);
     public Task<UserDto> GetUserAsync(Guid id);
+    public Task<UserDto> DeleteUserAsync(Guid id);
 }
 
 public class UserService : IUserService
@@ -42,5 +43,20 @@ public class UserService : IUserService
         }
 
         return UserDto.FromDomain(userDbEntity);
+    }
+
+    public async Task<UserDto> DeleteUserAsync(Guid id)
+    {
+        var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (user is null)
+        {
+            throw new NotFoundError($"User with id {id} not found");
+        }
+
+        _dbContext.Users.Remove(user);
+        await _dbContext.SaveChangesAsync();
+        
+        return UserDto.FromDomain(user);
     }
 }

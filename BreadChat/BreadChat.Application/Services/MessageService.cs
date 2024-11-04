@@ -10,6 +10,8 @@ public interface IMessageService
 {
     public Task<MessageDto> CreateMessageAsync(string text);
     public Task<MessageDto> GetMessageAsync(Guid id);
+
+    public Task<MessageDto> DeleteMessageAsync(Guid id);
 }
 
 public class MessageService : IMessageService
@@ -40,6 +42,21 @@ public class MessageService : IMessageService
         {
             throw new NotFoundError($"Message with id {id} not found");
         }
+
+        return MessageDto.FromDomain(message);
+    }
+
+    public async Task<MessageDto> DeleteMessageAsync(Guid id)
+    {
+        var message = await _dbContext.Messages.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (message is null)
+        {
+            throw new NotFoundError($"Message with id {id} not found");
+        }
+        
+        _dbContext.Messages.Remove(message);
+        await _dbContext.SaveChangesAsync();
 
         return MessageDto.FromDomain(message);
     }

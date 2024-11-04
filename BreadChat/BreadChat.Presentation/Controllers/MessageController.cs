@@ -30,4 +30,12 @@ public class MessageController : Controller
 
         return Ok(message);
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteMessage([FromRoute] Guid id)
+    {
+        var message = await _messageService.DeleteMessageAsync(id);
+
+        return Ok(message);
+    }
 }

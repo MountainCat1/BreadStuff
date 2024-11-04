@@ -33,4 +33,12 @@ public class ChannelController : Controller
         
         return Ok(channel);
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteChannel([FromRoute] Guid id)
+    {
+        var channel = await _channelService.DeleteChannelAsync(id);
+
+        return Ok(channel);
+    }
 }
