@@ -1,2 +1,3 @@
 # Run it at a level above BreadChat.Persistence
 dotnet ef migrations add <Migration Name> --project ./BreadChat.Persistence/ --startup-project ./BreadChat.Presentation
+dotnet ef database update --project ./BreadChat.Persistence/ --startup-project ./BreadChat.Presentation

@@ -21,6 +21,7 @@ services.AddDbContext<IBreadChatDbContext, BreadChatDbContext>(options =>
 
 services.AddScoped<IUserService, UserService>();
 services.AddScoped<IChannelService, ChannelService>();
+services.AddScoped<IMessageService, MessageService>();
 
 services.AddSingleton<ErrorHandlingMiddleware>();
 
@@ -38,11 +39,11 @@ app.UseHttpsRedirection();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<IBreadChatDbContext>();
-    
-    await dbContext.Database.MigrateAsync();
-}
+// using (var scope = app.Services.CreateScope())
+// {
+//     var dbContext = scope.ServiceProvider.GetRequiredService<IBreadChatDbContext>();
+//     
+//     await dbContext.Database.MigrateAsync();
+// }
 
 app.Run();
