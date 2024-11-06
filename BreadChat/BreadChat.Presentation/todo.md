@@ -3,7 +3,7 @@
   - [x] /api/users
   - [ ] /api/channels
   - [ ] /api/channels/{channelId}/messages
-- [ ] Add patch endpoints for
+- [ ] Add patch (update) endpoints for
   - [ ] /api/users/{userId}
 - [ ] Add swagger documentation for all endpoints
 - [ ] Add author property to message

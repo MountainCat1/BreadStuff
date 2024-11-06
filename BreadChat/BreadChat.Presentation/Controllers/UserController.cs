@@ -28,6 +28,8 @@ public class UserController : Controller
     }
     
     [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetUser([FromRoute] Guid id)
     {
         var user = await _userService.GetUserAsync(id);
