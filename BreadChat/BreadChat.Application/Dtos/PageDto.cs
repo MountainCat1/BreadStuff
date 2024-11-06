@@ -2,11 +2,11 @@
 
 public class PageDto<T>
 {
-    public int PageNumber { get; set; }
-    public int PageSize { get; set; }
-    public int TotalPages { get; set; }
-    public int TotalItems { get; set; }
-    public ICollection<T> Items { get; set; }
+    public int PageNumber { get; private set; }
+    public int PageSize { get; private set; }
+    public int TotalPages { get; private set; }
+    public int TotalItems { get; private set; }
+    public ICollection<T> Items { get; private set; }
     
     public PageDto(List<T> collection, int pageNumber, int pageSize, int total)
     {
