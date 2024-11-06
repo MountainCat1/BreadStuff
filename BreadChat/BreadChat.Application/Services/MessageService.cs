@@ -41,7 +41,7 @@ public class MessageService : IMessageService
 
         if (message is null)
         {
-            throw new NotFoundError($"Message with id {id} not found");
+            throw new NotFoundError($"Message with id {id} not found in a channel with id {channelId}");
         }
 
 
@@ -53,7 +53,7 @@ public class MessageService : IMessageService
 
         if (message is null)
         {
-            throw new NotFoundError($"Message with id {id} not found");
+            throw new NotFoundError($"Message with id {id} not found in a channel with id {channelId}");
         }
         
         _dbContext.Messages.Remove(message);
