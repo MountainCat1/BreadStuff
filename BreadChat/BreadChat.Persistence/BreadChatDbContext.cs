@@ -28,9 +28,8 @@ public class BreadChatDbContext : DbContext, IBreadChatDbContext
     protected override void OnModelCreating(ModelBuilder mb)
     {
         var user = mb.Entity<User>();
-
-        user.HasKey(x => x.Id);
         user.ToTable("Users");
+        user.HasKey(x => x.Id);
         user.Property(x => x.Username).IsRequired().HasMaxLength(32);
         user.Property(x => x.FirstName).IsRequired().HasMaxLength(32);
         user.Property(x => x.LastName).IsRequired().HasMaxLength(32);
@@ -39,10 +38,10 @@ public class BreadChatDbContext : DbContext, IBreadChatDbContext
         channel.ToTable("Channels");
         channel.HasKey(x => x.Id);
         channel.Property(x => x.Name).IsRequired().HasMaxLength(32);
-        channel.HasMany(x => x.Users).WithMany().UsingEntity<UserChannel>();
+        channel.HasMany(x => x.Users).WithMany().UsingEntity<ChannelMembership>();
 
-        var userChannel = mb.Entity<UserChannel>();
-        userChannel.ToTable("UserChannels");
+        var userChannel = mb.Entity<ChannelMembership>();
+        userChannel.ToTable("ChannelMemberships");
         userChannel.HasKey(x => new { x.UserId, x.ChannelId });
 
         var messages = mb.Entity<Message>();

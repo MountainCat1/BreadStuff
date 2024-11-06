@@ -1,6 +1,6 @@
 ﻿namespace BreadChat.Domain.Entities;
 
-public class UserChannel
+public class ChannelMembership
 {
     public Guid UserId { get; set; }
     public Guid ChannelId { get; set; }

@@ -37,6 +37,21 @@ namespace BreadChat.Persistence.Migrations
                     b.ToTable("Channels", (string)null);
                 });
 
+            modelBuilder.Entity("BreadChat.Domain.Entities.ChannelMembership", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ChannelId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("UserId", "ChannelId");
+
+                    b.HasIndex("ChannelId");
+
+                    b.ToTable("ChannelMemberships", (string)null);
+                });
+
             modelBuilder.Entity("BreadChat.Domain.Entities.Message", b =>
                 {
                     b.Property<Guid>("Id")
@@ -79,22 +94,7 @@ namespace BreadChat.Persistence.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("BreadChat.Domain.Entities.UserChannel", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ChannelId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("UserId", "ChannelId");
-
-                    b.HasIndex("ChannelId");
-
-                    b.ToTable("UserChannels", (string)null);
-                });
-
-            modelBuilder.Entity("BreadChat.Domain.Entities.UserChannel", b =>
+            modelBuilder.Entity("BreadChat.Domain.Entities.ChannelMembership", b =>
                 {
                     b.HasOne("BreadChat.Domain.Entities.Channel", null)
                         .WithMany()
