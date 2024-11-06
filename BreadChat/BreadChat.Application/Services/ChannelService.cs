@@ -37,7 +37,7 @@ public class ChannelService : IChannelService
     public async Task<ChannelDto> GetChannelAsync(Guid id)
     {
         var channelDbEntity = await _dbContext.Channels
-            .Include(x => x.Users)
+            .Include(x => x.Members)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (channelDbEntity is null)
@@ -51,7 +51,7 @@ public class ChannelService : IChannelService
     public async Task<ChannelDto> DeleteChannelAsync(Guid id)
     {
         var channelDbEntity = await _dbContext.Channels
-            .Include(x => x.Users)
+            .Include(x => x.Members)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (channelDbEntity is null)
@@ -68,7 +68,7 @@ public class ChannelService : IChannelService
     public async Task<ChannelDto> UpdateChannelAsync(Guid id, ChannelUpdateDto updateDto)
     {
         var channelEntity = await _dbContext.Channels
-            .Include(x => x.Users)
+            .Include(x => x.Members)
             .FirstOrDefaultAsync(x => x.Id == id);
         
         if (channelEntity is null)

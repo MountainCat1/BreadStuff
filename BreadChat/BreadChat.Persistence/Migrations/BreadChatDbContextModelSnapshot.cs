@@ -96,17 +96,26 @@ namespace BreadChat.Persistence.Migrations
 
             modelBuilder.Entity("BreadChat.Domain.Entities.ChannelMembership", b =>
                 {
-                    b.HasOne("BreadChat.Domain.Entities.Channel", null)
-                        .WithMany()
+                    b.HasOne("BreadChat.Domain.Entities.Channel", "Channel")
+                        .WithMany("Members")
                         .HasForeignKey("ChannelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BreadChat.Domain.Entities.User", null)
+                    b.HasOne("BreadChat.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Channel");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BreadChat.Domain.Entities.Channel", b =>
+                {
+                    b.Navigation("Members");
                 });
 #pragma warning restore 612, 618
         }

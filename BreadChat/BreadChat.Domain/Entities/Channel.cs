@@ -5,9 +5,9 @@ namespace BreadChat.Domain.Entities;
 public class Channel : IEntity
 {
     public Guid Id { get; private set; }
-    public string Name { get; private set; }
-    public string Description { get; private set; }
-    public List<User> Users { get; private set; }
+    public string Name { get; private set; } = null!;
+    public string Description { get; private set; } = null!;
+    public virtual List<ChannelMembership> Members { get; private set; } = null!; 
 
     public static Channel Create(string name, string description)
     {
@@ -16,7 +16,7 @@ public class Channel : IEntity
             Id = Guid.NewGuid(),
             Name = name,
             Description = description,
-            Users = new List<User>()
+            Members = new List<ChannelMembership>()
         };
     }
     
@@ -29,6 +29,6 @@ public class Channel : IEntity
 
 public class ChannelUpdate
 {
-    public string? Name { get; set; }
-    public string? Description { get; set; }
+    public string? Name { get; init; }
+    public string? Description { get; init; }
 }

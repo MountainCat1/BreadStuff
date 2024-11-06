@@ -16,7 +16,7 @@ public class ChannelDto
             Id = channel.Id,
             Name = channel.Name,
             Description = channel.Description,
-            Users = channel.Users.Select(x => UserDto.FromDomain(x)).ToList(),
+            Users = channel.Members.Select(x => UserDto.FromDomain(x.User)).ToList(),
         };
     }
     
@@ -27,7 +27,7 @@ public class ChannelDto
             Id = channel.Id,
             Name = channel.Name,
             Description = channel.Description,
-            Users = channel.Users.Select(x => UserDto.FromDomain(x)).ToList(),
+            Users = channel.Members.Select(x => UserDto.FromDomain(x.User)).ToList(),
         };
     }
 }

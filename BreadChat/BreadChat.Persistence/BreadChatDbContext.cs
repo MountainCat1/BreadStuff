@@ -38,12 +38,13 @@ public class BreadChatDbContext : DbContext, IBreadChatDbContext
         channel.ToTable("Channels");
         channel.HasKey(x => x.Id);
         channel.Property(x => x.Name).IsRequired().HasMaxLength(32);
-        channel.HasMany(x => x.Users).WithMany().UsingEntity<ChannelMembership>();
-
-        var userChannel = mb.Entity<ChannelMembership>();
-        userChannel.ToTable("ChannelMemberships");
-        userChannel.HasKey(x => new { x.UserId, x.ChannelId });
-
+        
+        var channelMembership = mb.Entity<ChannelMembership>();
+        channelMembership.ToTable("ChannelMemberships");
+        channelMembership.HasKey(x => new { x.UserId, x.ChannelId });
+        channelMembership.HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId);
+        channelMembership.HasOne(x => x.Channel).WithMany(x => x.Members).HasForeignKey(x => x.ChannelId);
+        
         var messages = mb.Entity<Message>();
         messages.ToTable("Messages");
         messages.HasKey(x => x.Id);
