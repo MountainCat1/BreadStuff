@@ -12,7 +12,7 @@ public class MessageDto
         return new MessageDto()
         {
             Id = message.Id,
-            Text = message.Text,
+            Text = message.Content,
         };
     }
 }

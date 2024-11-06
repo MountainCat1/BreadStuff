@@ -1,4 +1,5 @@
 ﻿using BreadChat.Application.ApplicationErrors;
+using BreadChat.Application.Dtos.ChannelDtos;
 using BreadChat.Application.Dtos.MessageDtos;
 using BreadChat.Domain.Entities;
 using BreadChat.Persistence;
@@ -8,13 +9,13 @@ namespace BreadChat.Application.Services;
 
 public interface IMessageService
 {
-    public Task<MessageDto> CreateMessageAsync(string text);
-    public Task<MessageDto> GetMessageAsync(Guid id);
+    public Task<MessageDto> CreateMessageAsync(Guid channelId, string text);
+    public Task<MessageDto> GetMessageAsync(Guid channelId, Guid messageId);
 
-    public Task<MessageDto> DeleteMessageAsync(Guid id);
+    public Task<MessageDto> DeleteMessageAsync(Guid channelId, Guid messageId);
 }
-
 public class MessageService : IMessageService
+
 {
     private IBreadChatDbContext _dbContext;
 
@@ -23,9 +24,9 @@ public class MessageService : IMessageService
         _dbContext = dbContext;
     }
 
-    public async Task<MessageDto> CreateMessageAsync(string text)
+    public async Task<MessageDto> CreateMessageAsync(Guid channelId, string text)
     {
-        var message = Message.Create(text);
+        var message = Message.Create(channelId, text);
 
         _dbContext.Messages.Add(message);
 
@@ -34,21 +35,21 @@ public class MessageService : IMessageService
         return MessageDto.FromDomain(message);
     }
 
-    public async Task<MessageDto> GetMessageAsync(Guid id)
+    public async Task<MessageDto> GetMessageAsync(Guid channelId, Guid id)
     {
-        var message = await _dbContext.Messages.FirstOrDefaultAsync(x => x.Id == id);
+        var message = await _dbContext.Messages.FirstOrDefaultAsync(x => x.ChannelId == channelId && x.Id == id);
 
         if (message is null)
         {
             throw new NotFoundError($"Message with id {id} not found");
         }
 
+
         return MessageDto.FromDomain(message);
     }
-
-    public async Task<MessageDto> DeleteMessageAsync(Guid id)
+    public async Task<MessageDto> DeleteMessageAsync(Guid channelId, Guid id)
     {
-        var message = await _dbContext.Messages.FirstOrDefaultAsync(x => x.Id == id);
+        var message = await _dbContext.Messages.FirstOrDefaultAsync(x => x.ChannelId == channelId && x.Id == id);
 
         if (message is null)
         {

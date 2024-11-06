@@ -48,6 +48,7 @@ public class BreadChatDbContext : DbContext, IBreadChatDbContext
         var messages = mb.Entity<Message>();
         messages.ToTable("Messages");
         messages.HasKey(x => x.Id);
-        messages.Property(x => x.Text).IsRequired().HasMaxLength(1024);
+        messages.Property(x => x.Content).IsRequired().HasMaxLength(1024);
+        messages.HasOne(x => x.Channel).WithMany().HasForeignKey(x => x.ChannelId).IsRequired();
     }
 }
