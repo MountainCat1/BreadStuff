@@ -39,11 +39,11 @@ app.UseHttpsRedirection();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
-// using (var scope = app.Services.CreateScope())
-// {
-//     var dbContext = scope.ServiceProvider.GetRequiredService<IBreadChatDbContext>();
-//     
-//     await dbContext.Database.MigrateAsync();
-// }
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<IBreadChatDbContext>();
+    
+    await dbContext.Database.MigrateAsync();
+}
 
 app.Run();

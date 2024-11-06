@@ -11,6 +11,7 @@ public interface IChannelService
     public Task<ChannelDto> CreateChannelAsync(string name, string description);
     public Task<ChannelDto> GetChannelAsync(Guid id);
     public Task<ChannelDto> DeleteChannelAsync(Guid id);
+    public Task<ChannelDto> UpdateChannelAsync(Guid id, ChannelUpdateDto updateDto);
 }
 
 public class ChannelService : IChannelService
@@ -62,5 +63,23 @@ public class ChannelService : IChannelService
         await _dbContext.SaveChangesAsync();
         
         return ChannelDto.FromDbEntity(channelDbEntity);
+    }
+
+    public async Task<ChannelDto> UpdateChannelAsync(Guid id, ChannelUpdateDto updateDto)
+    {
+        var channelEntity = await _dbContext.Channels
+            .Include(x => x.Users)
+            .FirstOrDefaultAsync(x => x.Id == id);
+        
+        if (channelEntity is null)
+            throw new NotFoundError($"Channel with id {id} not found");
+
+        channelEntity.Update(updateDto.ToDomain());
+
+        _dbContext.Channels.Update(channelEntity);
+        
+        await _dbContext.SaveChangesAsync();
+        
+        return ChannelDto.FromDbEntity(channelEntity);
     }
 }

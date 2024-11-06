@@ -29,8 +29,8 @@ public class BreadChatDbContext : DbContext, IBreadChatDbContext
     {
         var user = mb.Entity<User>();
 
-        user.ToTable("Users");
         user.HasKey(x => x.Id);
+        user.ToTable("Users");
         user.Property(x => x.Username).IsRequired().HasMaxLength(32);
         user.Property(x => x.FirstName).IsRequired().HasMaxLength(32);
         user.Property(x => x.LastName).IsRequired().HasMaxLength(32);

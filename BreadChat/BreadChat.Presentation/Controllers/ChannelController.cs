@@ -14,7 +14,7 @@ public class ChannelController : Controller
     {
         _channelService = channelService;
     }
-    
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetChannel([FromRoute] Guid id)
     {
@@ -22,7 +22,7 @@ public class ChannelController : Controller
 
         return Ok(channel);
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> CreateChannel([FromBody] ChannelCreateDto createDto)
     {
@@ -30,7 +30,7 @@ public class ChannelController : Controller
             createDto.Name,
             createDto.Description
         );
-        
+
         return Ok(channel);
     }
 
@@ -40,5 +40,13 @@ public class ChannelController : Controller
         var channel = await _channelService.DeleteChannelAsync(id);
 
         return Ok(channel);
+    }
+
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> UpdateChannel([FromRoute] Guid id, [FromBody] ChannelUpdateDto updateDto)
+    {
+        var channelDto = await _channelService.UpdateChannelAsync(id, updateDto);
+
+        return Ok(channelDto);
     }
 }

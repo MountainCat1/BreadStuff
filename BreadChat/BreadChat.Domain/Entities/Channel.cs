@@ -19,4 +19,16 @@ public class Channel : IEntity
             Users = new List<User>()
         };
     }
+    
+    public void Update(ChannelUpdate update)
+    {
+        Name = update.Name ?? Name;
+        Description = update.Description ?? Description;
+    }
+}
+
+public class ChannelUpdate
+{
+    public string? Name { get; set; }
+    public string? Description { get; set; }
 }
