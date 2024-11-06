@@ -11,6 +11,7 @@ public interface IUserService
     public Task<UserDto> CreateUserAsync(string username, string firstName, string lastName);
     public Task<UserDto> GetUserAsync(Guid id);
     public Task<UserDto> DeleteUserAsync(Guid id);
+    Task<PageDto<UserDto>> GetUsersAsync(int pageNumber, int pageSize);
 }
 
 public class UserService : IUserService
@@ -45,6 +46,16 @@ public class UserService : IUserService
         return UserDto.FromDomain(userDbEntity);
     }
 
+    public async Task<PageDto<UserDto>> GetUsersAsync(int pageNumber, int pageSize)
+    {
+        var users = await _dbContext.Users.Skip(pageNumber * pageSize).Take(pageSize).ToListAsync();
+        var userCount = await _dbContext.Users.CountAsync();
+
+        var userDtos = users.Select(x => UserDto.FromDomain(x)).ToList();
+
+        return new PageDto<UserDto>(userDtos, pageNumber, pageSize, userCount);
+    }
+
     public async Task<UserDto> DeleteUserAsync(Guid id)
     {
         var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
@@ -56,7 +67,7 @@ public class UserService : IUserService
 
         _dbContext.Users.Remove(user);
         await _dbContext.SaveChangesAsync();
-        
+
         return UserDto.FromDomain(user);
     }
 }

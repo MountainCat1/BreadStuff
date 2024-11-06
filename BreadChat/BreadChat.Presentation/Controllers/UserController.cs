@@ -42,4 +42,12 @@ public class UserController : Controller
 
         return Ok(user);
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetUsers([FromQuery] int pageNumber, [FromQuery] int pageSize)
+    {
+        var page = await _userService.GetUsersAsync(pageNumber, pageSize);
+
+        return Ok(page);
+    }
 }
