@@ -1,13 +1,13 @@
 ﻿### TODO 06 11 2024
-- [ ] Add pagination GET 
+- [x] Add pagination GET 
   - [x] /api/users
-  - [ ] /api/channels
-  - [ ] /api/channels/{channelId}/messages
-- [ ] Add patch (update) endpoints for
-  - [ ] /api/users/{userId}
-- [ ] Add swagger documentation for all endpoints
+  - [x] /api/channels (not tested)
+  - [x] /api/channels/{channelId}/messages (not tested)
+- [x] Add patch (update) endpoints for
+  - [x] /api/users/{userId}
+- [x] Add swagger documentation for all endpoints (example in UserController)
 - [ ] Add author property to message
-- [ ] Add channel mebership controller
+- [ ] Add channel membership controller
   - [ ] [GET] /api/channels/{channelId}/members -- Get all members of a channel
   - [ ] [POST] /api/channels/{channelId}/members -- Add a member to a channel
   - [ ] [DELETE] /api/channels/{channelId}/members/{userId} -- Remove a member from a channel

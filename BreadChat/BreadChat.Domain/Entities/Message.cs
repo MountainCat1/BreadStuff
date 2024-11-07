@@ -4,8 +4,6 @@ public class Message
 {
     public Guid Id { get; set; }
     public string Content { get; set; }
-    
-    
     public Guid ChannelId { get; set; }
     public virtual Channel Channel { get; set; } = null!;
 

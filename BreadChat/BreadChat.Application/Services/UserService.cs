@@ -1,5 +1,6 @@
 ﻿using BreadChat.Application.ApplicationErrors;
 using BreadChat.Application.Dtos;
+using BreadChat.Application.Dtos.UserDtos;
 using BreadChat.Domain.Entities;
 using BreadChat.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ public interface IUserService
     public Task<UserDto> CreateUserAsync(string username, string firstName, string lastName);
     public Task<UserDto> GetUserAsync(Guid id);
     public Task<UserDto> DeleteUserAsync(Guid id);
+    public Task<UserDto> UpdateUserAsync(Guid id, UserUpdateDto updateDto);
     Task<PageDto<UserDto>> GetUsersAsync(int pageNumber, int pageSize);
 }
 
@@ -44,6 +46,22 @@ public class UserService : IUserService
         }
 
         return UserDto.FromDomain(userDbEntity);
+    }
+
+    public async Task<UserDto> UpdateUserAsync(Guid id, UserUpdateDto updateDto)
+    {
+        var userEntity = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (userEntity is null)
+            throw new NotFoundError($"User with id {id} not found");
+
+        userEntity.Update(updateDto.ToDomain());
+
+        _dbContext.Users.Update(userEntity);
+        
+        await _dbContext.SaveChangesAsync();
+        
+        return UserDto.FromDbEntity(userEntity);
     }
 
     public async Task<PageDto<UserDto>> GetUsersAsync(int pageNumber, int pageSize)

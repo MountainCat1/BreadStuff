@@ -1,4 +1,5 @@
-﻿using BreadChat.Application.Dtos.MessageDtos;
+﻿using BreadChat.Application.Dtos;
+using BreadChat.Application.Dtos.MessageDtos;
 using BreadChat.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,7 @@ public class ChannelMessagesController : Controller
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(MessageDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> CreateMessage([FromRoute] Guid channelId, MessageCreateDto createDto)
     {
         var message = await _messageService.CreateMessageAsync(channelId, createDto.Text);
@@ -24,6 +26,8 @@ public class ChannelMessagesController : Controller
     }
 
     [HttpGet("{messageId}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(MessageDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetMessage([FromRoute] Guid channelId, [FromRoute] Guid messageId)
     {
         var message = await _messageService.GetMessageAsync(channelId, messageId);
@@ -32,10 +36,22 @@ public class ChannelMessagesController : Controller
     }
 
     [HttpDelete("{messageId}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(MessageDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteMessage([FromRoute] Guid channelId, [FromRoute] Guid messageId)
     {
         var message = await _messageService.DeleteMessageAsync(channelId, messageId);
 
         return Ok(message);
+    }
+    
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(PageDto<MessageDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetChannelMessages([FromQuery] int pageNumber, [FromQuery] int pageSize)
+    {
+        var page = await _messageService.GetMessagesAsync(pageNumber, pageSize);
+
+        return Ok(page);
     }
 }
