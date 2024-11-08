@@ -4,15 +4,17 @@ namespace BreadChat.Application.Dtos.MessageDtos;
 
 public class MessageDto
 {
-    public Guid Id { get; set; }
-    public string Text { get; set; }
+    public Guid Id { get; private set; }
+    public Guid AuthorId { get; private set; }
+    public string Text { get; private set; }
     
     public static MessageDto FromDomain(Message message)
     {
         return new MessageDto()
         {
             Id = message.Id,
-            Text = message.Content,
+            AuthorId = message.AuthorId,
+            Text = message.Content
         };
     }
 }

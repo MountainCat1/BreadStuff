@@ -9,7 +9,7 @@ namespace BreadChat.Application.Services;
 
 public interface IMessageService
 {
-    public Task<MessageDto> CreateMessageAsync(Guid channelId, string text);
+    public Task<MessageDto> CreateMessageAsync(Guid channelId, Guid authorId, string text);
     public Task<MessageDto> GetMessageAsync(Guid channelId, Guid messageId);
     public Task<MessageDto> DeleteMessageAsync(Guid channelId, Guid messageId);
     Task<PageDto<MessageDto>> GetMessagesAsync(int pageNumber, int pageSize);
@@ -24,9 +24,9 @@ public class MessageService : IMessageService
         _dbContext = dbContext;
     }
 
-    public async Task<MessageDto> CreateMessageAsync(Guid channelId, string text)
+    public async Task<MessageDto> CreateMessageAsync(Guid channelId, Guid authorId, string text)
     {
-        var message = Message.Create(channelId, text);
+        var message = Message.Create(channelId, authorId, text);
 
         _dbContext.Messages.Add(message);
 

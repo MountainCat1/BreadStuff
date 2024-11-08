@@ -50,5 +50,6 @@ public class BreadChatDbContext : DbContext, IBreadChatDbContext
         messages.HasKey(x => x.Id);
         messages.Property(x => x.Content).IsRequired().HasMaxLength(1024);
         messages.HasOne(x => x.Channel).WithMany().HasForeignKey(x => x.ChannelId).IsRequired();
+        messages.HasOne(x => x.Author).WithMany().HasForeignKey(x => x.AuthorId).IsRequired();
     }
 }

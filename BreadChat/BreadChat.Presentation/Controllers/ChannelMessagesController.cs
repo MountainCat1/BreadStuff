@@ -1,4 +1,5 @@
-﻿using BreadChat.Application.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
+using BreadChat.Application.Dtos;
 using BreadChat.Application.Dtos.MessageDtos;
 using BreadChat.Application.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -18,9 +19,9 @@ public class ChannelMessagesController : Controller
 
     [HttpPost]
     [ProducesResponseType(typeof(MessageDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> CreateMessage([FromRoute] Guid channelId, MessageCreateDto createDto)
+    public async Task<IActionResult> CreateMessage([FromRoute] Guid channelId, [FromQuery, Required] Guid authorId, MessageCreateDto createDto)
     {
-        var message = await _messageService.CreateMessageAsync(channelId, createDto.Text);
+        var message = await _messageService.CreateMessageAsync(channelId, authorId, createDto.Text);
 
         return Ok(message);
     }
