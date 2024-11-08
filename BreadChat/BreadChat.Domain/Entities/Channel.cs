@@ -35,6 +35,15 @@ public class Channel : IEntity
 
         return membership;
     }
+    
+    public ChannelMembership RemoveMember(User user)
+    {
+        var membership = Members.FirstOrDefault(x => x.User == user);
+        
+        Members.Remove(membership);
+
+        return membership;
+    }
 
     public Message SendMessage(string content, User sender)
     {
