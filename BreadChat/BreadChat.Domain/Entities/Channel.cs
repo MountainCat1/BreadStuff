@@ -8,6 +8,7 @@ public class Channel : IEntity
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;
     public virtual List<ChannelMembership> Members { get; private set; } = null!; 
+    public virtual List<Message> Messages { get; private set; } = null!; 
 
     public static Channel Create(string name, string description)
     {
@@ -24,6 +25,24 @@ public class Channel : IEntity
     {
         Name = update.Name ?? Name;
         Description = update.Description ?? Description;
+    }
+
+    public ChannelMembership AddMember(User user)
+    {
+        var membership = ChannelMembership.Create(this, user);
+        
+        Members.Add(membership);
+
+        return membership;
+    }
+
+    public Message SendMessage(string content, User sender)
+    {
+        var message = Message.Create(this, sender, content);
+        
+        Messages.Add(message);
+
+        return message;
     }
 }
 

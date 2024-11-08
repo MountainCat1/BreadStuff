@@ -22,6 +22,7 @@ services.AddDbContext<IBreadChatDbContext, BreadChatDbContext>(options =>
 services.AddScoped<IUserService, UserService>();
 services.AddScoped<IChannelService, ChannelService>();
 services.AddScoped<IMessageService, MessageService>();
+services.AddScoped<IMembershipService, MembershipService>();
 
 services.AddSingleton<ErrorHandlingMiddleware>();
 

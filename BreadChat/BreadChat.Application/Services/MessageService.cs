@@ -9,7 +9,7 @@ namespace BreadChat.Application.Services;
 
 public interface IMessageService
 {
-    public Task<MessageDto> CreateMessageAsync(Guid channelId, Guid authorId, string text);
+    public Task CreateMessageAsync(Guid channelId, Guid authorId, string content);
     public Task<MessageDto> GetMessageAsync(Guid channelId, Guid messageId);
     public Task<MessageDto> DeleteMessageAsync(Guid channelId, Guid messageId);
     Task<PageDto<MessageDto>> GetMessagesAsync(int pageNumber, int pageSize);
@@ -24,15 +24,28 @@ public class MessageService : IMessageService
         _dbContext = dbContext;
     }
 
-    public async Task<MessageDto> CreateMessageAsync(Guid channelId, Guid authorId, string text)
+    public async Task CreateMessageAsync(Guid channelId, Guid authorId, string content)
     {
-        var message = Message.Create(channelId, authorId, text);
+        var channel = await _dbContext.Channels
+            .Include(x => x.Messages)
+            .FirstOrDefaultAsync(x => x.Id == channelId);
+        
+        if (channel is null)
+        {
+            throw new NotFoundError($"Channel with id {channelId} not found ");
+        }
+        
+        var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == authorId);
 
+        if (user is null)
+        {
+            throw new NotFoundError($"User with id {authorId} not found ");
+        }
+
+        var message = channel.SendMessage(content, user);
         _dbContext.Messages.Add(message);
 
         await _dbContext.SaveChangesAsync();
-
-        return MessageDto.FromDomain(message);
     }
 
     public async Task<MessageDto> GetMessageAsync(Guid channelId, Guid id)

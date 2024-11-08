@@ -8,6 +8,7 @@ public interface IBreadChatDbContext
 {
     DbSet<User> Users { get; set; }
     DbSet<Channel> Channels { get; set; }
+    DbSet<ChannelMembership> ChannelMemberships { get; set; }
     DbSet<Message> Messages { get; set; }
     DatabaseFacade Database { get; }
 
@@ -18,6 +19,7 @@ public class BreadChatDbContext : DbContext, IBreadChatDbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Channel> Channels { get; set; }
+    public DbSet<ChannelMembership> ChannelMemberships { get; set; }
     public DbSet<Message> Messages { get; set; }
     
     public BreadChatDbContext(DbContextOptions<BreadChatDbContext> options) : base(options)
@@ -49,7 +51,7 @@ public class BreadChatDbContext : DbContext, IBreadChatDbContext
         messages.ToTable("Messages");
         messages.HasKey(x => x.Id);
         messages.Property(x => x.Content).IsRequired().HasMaxLength(1024);
-        messages.HasOne(x => x.Channel).WithMany().HasForeignKey(x => x.ChannelId).IsRequired();
+        messages.HasOne(x => x.Channel).WithMany(x => x.Messages).HasForeignKey(x => x.ChannelId).IsRequired();
         messages.HasOne(x => x.Author).WithMany().HasForeignKey(x => x.AuthorId).IsRequired();
     }
 }
