@@ -1,5 +1,5 @@
 ﻿using BreadChat.Application.ApplicationErrors;
-using BreadChat.Application.Dtos.ChannelDtos;
+using BreadChat.Application.Dtos;
 using BreadChat.Application.Dtos.MessageDtos;
 using BreadChat.Domain.Entities;
 using BreadChat.Persistence;
@@ -9,10 +9,10 @@ namespace BreadChat.Application.Services;
 
 public interface IMessageService
 {
-    public Task<MessageDto> CreateMessageAsync(Guid channelId, string text);
+    public Task CreateMessageAsync(Guid channelId, Guid authorId, string content);
     public Task<MessageDto> GetMessageAsync(Guid channelId, Guid messageId);
-
     public Task<MessageDto> DeleteMessageAsync(Guid channelId, Guid messageId);
+    Task<PageDto<MessageDto>> GetMessagesAsync(Guid channelId, int pageNumber, int pageSize);
 }
 public class MessageService : IMessageService
 
@@ -24,15 +24,28 @@ public class MessageService : IMessageService
         _dbContext = dbContext;
     }
 
-    public async Task<MessageDto> CreateMessageAsync(Guid channelId, string text)
+    public async Task CreateMessageAsync(Guid channelId, Guid authorId, string content)
     {
-        var message = Message.Create(channelId, text);
+        var channel = await _dbContext.Channels
+            .Include(x => x.Messages)
+            .FirstOrDefaultAsync(x => x.Id == channelId);
+        
+        if (channel is null)
+        {
+            throw new NotFoundError($"Channel with id {channelId} not found ");
+        }
+        
+        var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == authorId);
 
+        if (user is null)
+        {
+            throw new NotFoundError($"User with id {authorId} not found ");
+        }
+
+        var message = channel.SendMessage(content, user);
         _dbContext.Messages.Add(message);
 
         await _dbContext.SaveChangesAsync();
-
-        return MessageDto.FromDomain(message);
     }
 
     public async Task<MessageDto> GetMessageAsync(Guid channelId, Guid id)
@@ -60,5 +73,20 @@ public class MessageService : IMessageService
         await _dbContext.SaveChangesAsync();
 
         return MessageDto.FromDomain(message);
+    }
+
+    public async Task<PageDto<MessageDto>> GetMessagesAsync(Guid channelId, int pageNumber, int pageSize)
+    {
+        var messages = await _dbContext.Messages
+            .Where(x => x.ChannelId == channelId)
+            .Skip(pageNumber * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+        
+        var messageCount = await _dbContext.Messages.CountAsync();
+
+        var messageDtos = messages.Select(x => MessageDto.FromDomain(x)).ToList();
+
+        return new PageDto<MessageDto>(messageDtos, pageNumber, pageSize, messageCount);
     }
 }

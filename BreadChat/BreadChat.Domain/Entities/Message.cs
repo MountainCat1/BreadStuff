@@ -2,24 +2,25 @@
 
 public class Message
 {
-    public Guid Id { get; set; }
-    public string Content { get; set; }
-    
-    
-    public Guid ChannelId { get; set; }
-    public virtual Channel Channel { get; set; } = null!;
+    public Guid Id { get; private set; }
+    public string Content { get; private set; }
+    public Guid ChannelId { get; private set; }
+    public Guid AuthorId { get; private set; }
+    public virtual Channel Channel { get; private set; } = null!;
+    public virtual User Author { get; private set; } = null!;
 
     private Message()
     {
     }
 
-    public static Message Create(Guid channelId, string text)
+    internal static Message Create(Channel channel, User user, string content)
     {
         return new Message()
         {
             Id = Guid.NewGuid(),
-            ChannelId = channelId,
-            Content = text,
+            Content = content,
+            ChannelId = channel.Id,
+            AuthorId = user.Id
         };
     }
 }

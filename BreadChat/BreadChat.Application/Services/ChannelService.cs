@@ -1,4 +1,5 @@
 ﻿using BreadChat.Application.ApplicationErrors;
+using BreadChat.Application.Dtos;
 using BreadChat.Application.Dtos.ChannelDtos;
 using BreadChat.Domain.Entities;
 using BreadChat.Persistence;
@@ -12,6 +13,7 @@ public interface IChannelService
     public Task<ChannelDto> GetChannelAsync(Guid id);
     public Task<ChannelDto> DeleteChannelAsync(Guid id);
     public Task<ChannelDto> UpdateChannelAsync(Guid id, ChannelUpdateDto updateDto);
+    Task<PageDto<ChannelDto>> GetChannelsAsync(int pageNumber, int pageSize);
 }
 
 public class ChannelService : IChannelService
@@ -81,5 +83,15 @@ public class ChannelService : IChannelService
         await _dbContext.SaveChangesAsync();
         
         return ChannelDto.FromDbEntity(channelEntity);
+    }
+
+    public async Task<PageDto<ChannelDto>> GetChannelsAsync(int pageNumber, int pageSize)
+    {
+        var channels = await _dbContext.Channels.Skip(pageNumber * pageSize).Take(pageSize).ToListAsync();
+        var channelCount = await _dbContext.Channels.CountAsync();
+
+        var userDtos = channels.Select(x => ChannelDto.FromDomain(x)).ToList();
+
+        return new PageDto<ChannelDto>(userDtos, pageNumber, pageSize, channelCount);
     }
 }

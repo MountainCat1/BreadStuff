@@ -1,4 +1,5 @@
-﻿using BreadChat.Domain.Entities;
+﻿using BreadChat.Application.Dtos.UserDtos;
+using BreadChat.Domain.Entities;
 
 namespace BreadChat.Application.Dtos.ChannelDtos;
 

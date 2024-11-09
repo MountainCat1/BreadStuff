@@ -1,4 +1,4 @@
-﻿namespace BreadChat.Application.Dtos;
+﻿namespace BreadChat.Application.Dtos.UserDtos;
 
 public class UserCreateDto
 {

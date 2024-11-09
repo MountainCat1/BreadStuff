@@ -3,6 +3,7 @@ using System;
 using BreadChat.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BreadChat.Persistence.Migrations
 {
     [DbContext(typeof(BreadChatDbContext))]
-    partial class BreadChatDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241108102405_AddMessageAuthor")]
+    partial class AddMessageAuthor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
@@ -132,7 +135,7 @@ namespace BreadChat.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("BreadChat.Domain.Entities.Channel", "Channel")
-                        .WithMany("Messages")
+                        .WithMany()
                         .HasForeignKey("ChannelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -145,8 +148,6 @@ namespace BreadChat.Persistence.Migrations
             modelBuilder.Entity("BreadChat.Domain.Entities.Channel", b =>
                 {
                     b.Navigation("Members");
-
-                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }
