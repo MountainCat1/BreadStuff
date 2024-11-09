@@ -13,7 +13,7 @@ public class Message
     {
     }
 
-    internal static Message Create(Channel channel, User user, string content)
+    public static Message Create(Channel channel, User user, string content)
     {
         return new Message()
         {

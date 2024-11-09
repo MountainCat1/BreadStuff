@@ -39,7 +39,6 @@ public class ChannelService : IChannelService
     public async Task<ChannelDto> GetChannelAsync(Guid id)
     {
         var channelDbEntity = await _dbContext.Channels
-            .Include(x => x.Members)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (channelDbEntity is null)

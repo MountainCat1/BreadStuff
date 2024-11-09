@@ -8,8 +8,7 @@ public class Channel : IEntity
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;
     public virtual List<ChannelMembership> Members { get; private set; } = null!; 
-    public virtual List<Message> Messages { get; private set; } = null!; 
-
+    
     public static Channel Create(string name, string description)
     {
         return new Channel()
@@ -45,12 +44,11 @@ public class Channel : IEntity
         return membership;
     }
 
-    public Message SendMessage(string content, User sender)
+    public Message SendMessage(Message message)
     {
-        var message = Message.Create(this, sender, content);
+        if(message.ChannelId != Id)
+            throw new InvalidOperationException("Message must be sent to the channel it was created in.");
         
-        Messages.Add(message);
-
         return message;
     }
 }

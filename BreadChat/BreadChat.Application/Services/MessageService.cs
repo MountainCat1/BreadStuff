@@ -27,7 +27,6 @@ public class MessageService : IMessageService
     public async Task CreateMessageAsync(Guid channelId, Guid authorId, string content)
     {
         var channel = await _dbContext.Channels
-            .Include(x => x.Messages)
             .FirstOrDefaultAsync(x => x.Id == channelId);
         
         if (channel is null)
@@ -42,7 +41,10 @@ public class MessageService : IMessageService
             throw new NotFoundError($"User with id {authorId} not found ");
         }
 
-        var message = channel.SendMessage(content, user);
+        var message = Message.Create(channel, user, content);
+        
+        channel.SendMessage(message);
+        
         _dbContext.Messages.Add(message);
 
         await _dbContext.SaveChangesAsync();
