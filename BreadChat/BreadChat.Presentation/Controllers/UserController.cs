@@ -1,4 +1,5 @@
-﻿using BreadChat.Application.Dtos;
+﻿using System.Security.Claims;
+using BreadChat.Application.Dtos;
 using BreadChat.Application.Dtos.UserDtos;
 using BreadChat.Application.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,12 @@ namespace BreadChat.Controllers;
 public class UserController : Controller
 {
     private IUserService _userService;
+    private IJwtService _jwtService;
 
-    public UserController(IUserService userService)
+    public UserController(IUserService userService, IJwtService jwtService)
     {
         _userService = userService;
+        _jwtService = jwtService;
     }
     
     [HttpGet("{id}")]
@@ -67,5 +70,27 @@ public class UserController : Controller
         var user = await _userService.DeleteUserAsync(id);
 
         return Ok(user);
+    }
+    
+    [HttpGet("{id}/token")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetToken([FromRoute] Guid id)
+    {
+        var userEntity = await _userService.GetUserAsync(id);
+
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, userEntity.Id.ToString()),
+            new(ClaimTypes.Name, userEntity.Username),
+            new(ClaimTypes.GivenName, userEntity.FirstName),
+            new(ClaimTypes.Surname, userEntity.LastName),
+        };
+        
+        var identity = new ClaimsIdentity(claims);
+        
+        var token = _jwtService.GenerateSymmetricJwtToken(identity);
+
+        return Ok(token);
     }
 }
