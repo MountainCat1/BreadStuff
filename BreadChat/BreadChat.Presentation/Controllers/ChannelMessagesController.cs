@@ -48,9 +48,9 @@ public class ChannelMessagesController : Controller
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(PageDto<MessageDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetChannelMessages([FromQuery] int pageNumber, [FromQuery] int pageSize)
+    public async Task<IActionResult> GetChannelMessages([FromRoute] Guid channelId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
     {
-        var page = await _messageService.GetMessagesAsync(pageNumber, pageSize);
+        var page = await _messageService.GetMessagesAsync(channelId, pageNumber, pageSize);
 
         return Ok(page);
     }

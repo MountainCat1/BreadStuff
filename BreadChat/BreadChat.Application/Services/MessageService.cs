@@ -12,7 +12,7 @@ public interface IMessageService
     public Task CreateMessageAsync(Guid channelId, Guid authorId, string content);
     public Task<MessageDto> GetMessageAsync(Guid channelId, Guid messageId);
     public Task<MessageDto> DeleteMessageAsync(Guid channelId, Guid messageId);
-    Task<PageDto<MessageDto>> GetMessagesAsync(int pageNumber, int pageSize);
+    Task<PageDto<MessageDto>> GetMessagesAsync(Guid channelId, int pageNumber, int pageSize);
 }
 public class MessageService : IMessageService
 
@@ -75,9 +75,14 @@ public class MessageService : IMessageService
         return MessageDto.FromDomain(message);
     }
 
-    public async Task<PageDto<MessageDto>> GetMessagesAsync(int pageNumber, int pageSize)
+    public async Task<PageDto<MessageDto>> GetMessagesAsync(Guid channelId, int pageNumber, int pageSize)
     {
-        var messages = await _dbContext.Messages.Skip(pageNumber * pageSize).Take(pageSize).ToListAsync();
+        var messages = await _dbContext.Messages
+            .Where(x => x.ChannelId == channelId)
+            .Skip(pageNumber * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+        
         var messageCount = await _dbContext.Messages.CountAsync();
 
         var messageDtos = messages.Select(x => MessageDto.FromDomain(x)).ToList();
